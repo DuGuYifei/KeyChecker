@@ -1,11 +1,11 @@
 #include "confirmsendpushbutton.h"
-#include <QEventLoop>
 #include <QMessageBox>
 #include <QNetworkRequest>
 #include <QJsonObject>
 #include <QNetworkInterface>
 #include <QJsonDocument>
 #include <QNetworkReply>
+
 
 #define CHECK_IN_URL "http://localhost:8089/api/keys/key-check"
 
@@ -25,10 +25,10 @@ QString getHostMacAddress()
     return strMacAddr;
 }
 
-void handleReply(QNetworkReply* reply)
+bool handleReply(QNetworkReply* reply)
 {
     QMessageBox messageBox;
-    qDebug() << reply->error();
+    // qDebug() << reply->error();
     if(reply->error() == QNetworkReply::ContentNotFoundError)
     {
         messageBox.setText("Invalid key");
@@ -48,6 +48,7 @@ void handleReply(QNetworkReply* reply)
         messageBox.setText(reply_data);
         messageBox.setDefaultButton(QMessageBox::Ok);
         messageBox.exec();
+        return true;
     }
     else
     {
@@ -55,6 +56,9 @@ void handleReply(QNetworkReply* reply)
         messageBox.setDefaultButton(QMessageBox::Ok);
         messageBox.exec();
     }
+    //return false;
+    //test, need delete below.
+    return true;
 }
 
 ConfirmSendPushButton::ConfirmSendPushButton(const QString &text, QWidget *parent, QLineEdit* keyEdit) :QPushButton(text, parent)
@@ -85,5 +89,14 @@ void ConfirmSendPushButton::clickEvents()
     connect(reply, &QNetworkReply::finished, &messageBox, &QMessageBox::close);
     messageBox.exec();
 
-    handleReply(reply);
+    if(handleReply(reply))
+    {
+        delete(keyEdit);
+        delete(this);
+    }
+}
+
+ConfirmSendPushButton::~ConfirmSendPushButton()
+{
+
 }

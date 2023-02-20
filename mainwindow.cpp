@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "qthread.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -10,9 +11,18 @@ MainWindow::MainWindow(QWidget *parent)
     btnConfirm->move(460, 48);
     btnConfirm->setFixedSize(100, 24);
     this->setFixedSize(640, 100);
+
+    // when request pass close the button, and create message label
+    connect(btnConfirm,
+            &ConfirmSendPushButton::destroyed,
+            this,
+            [&]()->void{msgLabel = new MessageLabel(this);});
+
 }
 
 MainWindow::~MainWindow()
 {
+    msgLabel->getThread()->quit();
+    msgLabel->getThread()->wait();
 }
 

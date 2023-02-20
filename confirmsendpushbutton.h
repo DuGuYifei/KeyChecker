@@ -13,6 +13,7 @@ private:
 public:
     ConfirmSendPushButton(const QString &text, QWidget *parent = nullptr, QLineEdit* keyEdit = nullptr);
     void clickEvents();
+    ~ConfirmSendPushButton();
 };
 
 #endif // CONFIRMSENDPUSHBUTTON_H

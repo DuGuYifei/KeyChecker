@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QLineEdit>
 #include "confirmsendpushbutton.h"
+#include "messagelabel.h"
 
 class MainWindow : public QMainWindow
 {
@@ -11,6 +12,7 @@ class MainWindow : public QMainWindow
 private:
     ConfirmSendPushButton* btnConfirm;
     QLineEdit* keyEdit;
+    MessageLabel* msgLabel;
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();

@@ -17,6 +17,7 @@ public:
     void addText(QString text);
     void startTimer();
     QThread *getThread() const;
+    MessagePipe *getMessagePipe() const;
 };
 
 #endif // MESSAGELABEL_H

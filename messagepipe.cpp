@@ -1,5 +1,6 @@
 #include "messagepipe.h"
-#include <QDebug>
+#include <QCoreApplication>
+
 
 MessagePipe::MessagePipe(LPCWSTR name)
 {
@@ -29,20 +30,27 @@ bool MessagePipe::waitConnect()
     return true;
 }
 
-void MessagePipe::writeMsg(LPTSTR lpvMessage)
+void MessagePipe::writeMsg(const char* message)
 {
     // Pipe connected; send message to aother client
-    WriteFile(hPipe, lpvMessage, (lstrlen(lpvMessage) + 1) * sizeof(TCHAR), &dwWritten, NULL);
+    WriteFile(hPipe, message, strlen(message), &dwWritten, NULL);
 }
 
 void MessagePipe::readMsg()
 {
-    if(PeekNamedPipe(hPipe, NULL, 0, NULL, &dwRead, NULL))
+    if(PeekNamedPipe(hPipe, chReadBuf, BUFSIZE * sizeof(TCHAR), NULL, &dwRead, NULL))
     {
+        if(dwRead == 0)
+            return;
+        QString bufMsg = (const char*)chReadBuf;
+        if(bufMsg.startsWith("server:"))
+            return;
+        memset(chReadBuf, 0, sizeof(chReadBuf));
         ReadFile(hPipe, chReadBuf, BUFSIZE * sizeof(TCHAR), &dwRead, NULL);
-        FlushFileBuffers(hPipe);
-        qDebug() << (const char*)chReadBuf;
+        // qDebug() << (const char*)chReadBuf;
         emit this->receiveMsg((const char*)chReadBuf);
+        if(strcmp((const char*)chReadBuf, "client:已断开") == 0)
+            QCoreApplication::quit();
     }
 }
 

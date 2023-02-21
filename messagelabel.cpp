@@ -7,21 +7,26 @@ QThread *MessageLabel::getThread() const
     return thread;
 }
 
+MessagePipe *MessageLabel::getMessagePipe() const
+{
+    return messagePipe;
+}
+
 MessageLabel::MessageLabel(QWidget *parent) : QLabel(parent)
 {
     parent->setFixedSize(600, 400);
-    parent->move(600, 400);
-    this->setGeometry(20,20,parent->width() - 40, parent->height() - 40);
+    // parent->move(600, 400);
+    this->setGeometry(20,20,parent->width() - 50, parent->height() - 50);
     this->setAlignment(Qt::AlignLeft);
 
     this->messagePipe = new MessagePipe(L"\\\\.\\pipe\\my_pipe");
-    while(!this->messagePipe->waitConnect());
+
     thread = new QThread(this);
     this->messagePipe->moveToThread(thread);
     connect(thread, &QThread::started, this, &MessageLabel::startTimer);
     connect(messagePipe, &MessagePipe::receiveMsg, this, &MessageLabel::addText);
-    thread->start();
     this->show();
+    thread->start();
 }
 
 void MessageLabel::addText(QString text)

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <windows.h>
 
+
 const int BUFSIZE = 1024;
 
 class MessagePipe : public QObject
@@ -17,12 +18,12 @@ private:
 public:
     MessagePipe(LPCWSTR name);
     bool waitConnect();
-    void writeMsg(LPTSTR lpvMessage);
+    void writeMsg(const char* message);
     void readMsg();
     ~MessagePipe();
 
 Q_SIGNALS:
-    void receiveMsg(QString lpvMessage);
+    void receiveMsg(QString message);
 };
 
 #endif // MESSAGEPIPE_H

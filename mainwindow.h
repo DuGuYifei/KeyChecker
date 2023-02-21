@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QLineEdit>
+#include <QProcess>
 #include "confirmsendpushbutton.h"
 #include "messagelabel.h"
 
@@ -13,8 +14,10 @@ private:
     ConfirmSendPushButton* btnConfirm;
     QLineEdit* keyEdit;
     MessageLabel* msgLabel;
+    QProcess *wrappeeProcess;
 public:
     MainWindow(QWidget *parent = nullptr);
+    void startWrappee();
     ~MainWindow();
 };
 #endif // MAINWINDOW_H

@@ -2,10 +2,10 @@
 #include <QCoreApplication>
 
 
-MessagePipe::MessagePipe(LPCWSTR name)
+MessagePipe::MessagePipe(LPCSTR name)
 {
     // Create named pipe
-    hPipe = CreateNamedPipe(name,
+    hPipe = CreateNamedPipeA(name,
                             PIPE_ACCESS_DUPLEX,
                             PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,
                             PIPE_UNLIMITED_INSTANCES,
@@ -13,10 +13,10 @@ MessagePipe::MessagePipe(LPCWSTR name)
                             BUFSIZE,
                             0,
                             NULL);
-//    if (hPipe == INVALID_HANDLE_VALUE) {
-//        qDebug() << "Error creating named pipe: " << GetLastError();
-//        return;
-//    }
+    //    if (hPipe == INVALID_HANDLE_VALUE) {
+    //        qDebug() << "Error creating named pipe: " << GetLastError();
+    //        return;
+    //    }
 }
 
 bool MessagePipe::waitConnect()
@@ -34,6 +34,7 @@ void MessagePipe::writeMsg(const char* message)
 {
     // Pipe connected; send message to aother client
     WriteFile(hPipe, message, strlen(message), &dwWritten, NULL);
+    FlushFileBuffers(hPipe);
 }
 
 void MessagePipe::readMsg()
@@ -57,7 +58,7 @@ void MessagePipe::readMsg()
 MessagePipe::~MessagePipe()
 {
     // Disconnect the pipe
-    FlushFileBuffers(hPipe);
+    // FlushFileBuffers(hPipe);
     DisconnectNamedPipe(hPipe);
     CloseHandle(hPipe);
 }

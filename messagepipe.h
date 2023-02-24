@@ -16,7 +16,7 @@ private:
     DWORD dwRead, dwWritten;
 
 public:
-    MessagePipe(LPCWSTR name);
+    MessagePipe(LPCSTR name);
     bool waitConnect();
     void writeMsg(const char* message);
     void readMsg();

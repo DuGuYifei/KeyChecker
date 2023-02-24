@@ -5,6 +5,7 @@
 #include <string>
 
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -26,28 +27,34 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::startWrappee()
 {
+    if(msgLabel)
+        delete(msgLabel);
+
     msgLabel = new MessageLabel(this);
 
     QStringList arguments;
     arguments << "";
     wrappeeProcess = new QProcess(this);
     wrappeeProcess->start("test.exe", arguments);
+
     if(wrappeeProcess->waitForStarted()) {
         msgLabel->addText("Start successfully!");
     }
     else {
         msgLabel->addText("Failed to start process! Please, restart");
     }
+
+    controllerThread = new ControllerThread();
+    controllerThread->start();
     while(!msgLabel->getMessagePipe()->waitConnect());
     msgLabel->getMessagePipe()->writeMsg("test");
     QRect screenGeometry = QGuiApplication::primaryScreen()->geometry();
-    msgLabel->getMessagePipe()->writeMsg(std::to_string(screenGeometry.width()).c_str());
-    msgLabel->getMessagePipe()->writeMsg(std::to_string(screenGeometry.height()).c_str());
 }
 
 MainWindow::~MainWindow()
 {
     this->wrappeeProcess->kill();
+    controllerThread->requestInterruption();
     msgLabel->getThread()->quit();
     msgLabel->getThread()->wait();
 }

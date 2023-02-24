@@ -14,14 +14,11 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network)
 
 set(PROJECT_SOURCES
         main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        confirmsendpushbutton.h
-        confirmsendpushbutton.cpp
-        messagepipe.h
-        messagepipe.cpp
-        messagelabel.h
-        messagelabel.cpp
+        mainwindow.cpp          mainwindow.h
+        confirmsendpushbutton.h confirmsendpushbutton.cpp
+        messagepipe.h           messagepipe.cpp
+        messagelabel.h          messagelabel.cpp
+        controllerthread.h      controllerthread.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

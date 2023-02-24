@@ -19,7 +19,7 @@ MessageLabel::MessageLabel(QWidget *parent) : QLabel(parent)
     this->setGeometry(20,20,parent->width() - 50, parent->height() - 50);
     this->setAlignment(Qt::AlignLeft);
 
-    this->messagePipe = new MessagePipe(L"\\\\.\\pipe\\my_pipe");
+    this->messagePipe = new MessagePipe(u8"\\\\.\\pipe\\my_pipe");
 
     thread = new QThread(this);
     this->messagePipe->moveToThread(thread);

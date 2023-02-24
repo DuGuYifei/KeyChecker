@@ -56,9 +56,9 @@ bool handleReply(QNetworkReply* reply)
         messageBox.setDefaultButton(QMessageBox::Ok);
         messageBox.exec();
     }
-    //return false;
-    //test, need delete below.
-    return true;
+    return false;
+    // test, need delete below.
+    // return true;
 }
 
 ConfirmSendPushButton::ConfirmSendPushButton(const QString &text, QWidget *parent, QLineEdit* keyEdit) :QPushButton(text, parent)

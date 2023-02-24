@@ -6,6 +6,7 @@
 #include <QProcess>
 #include "confirmsendpushbutton.h"
 #include "messagelabel.h"
+#include "controllerthread.h"
 
 class MainWindow : public QMainWindow
 {
@@ -13,8 +14,9 @@ class MainWindow : public QMainWindow
 private:
     ConfirmSendPushButton* btnConfirm;
     QLineEdit* keyEdit;
-    MessageLabel* msgLabel;
+    MessageLabel* msgLabel = nullptr;
     QProcess *wrappeeProcess;
+    ControllerThread* controllerThread;
 public:
     MainWindow(QWidget *parent = nullptr);
     void startWrappee();

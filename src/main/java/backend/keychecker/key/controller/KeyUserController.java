@@ -2,6 +2,7 @@ package backend.keychecker.key.controller;
 
 
 import backend.keychecker.digest.Sha256;
+import backend.keychecker.key.dto.CheckKeyRequest;
 import backend.keychecker.key.dto.UpdateBindKeyRequest;
 import backend.keychecker.key.entity.Key;
 import backend.keychecker.key.service.KeyService;
@@ -47,4 +48,16 @@ public class KeyUserController {
         }
     }
 
+    @PostMapping("/check-with-key")
+    public ResponseEntity<String> checkWithKey(@RequestBody CheckKeyRequest request) {
+        List<Key> keys = keyService.findByKeyStr(request.getKey_str());
+        if (!keys.isEmpty()) {
+            Key key = keys.get(0);
+            if(key.getExpire().before(new Date()))
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("密钥已过期(key is expired)");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.accepted().body("密钥正确(key is correct)");
+    }
 }

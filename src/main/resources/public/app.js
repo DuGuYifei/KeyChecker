@@ -1,6 +1,6 @@
 window.eruptSiteConfig = {
     //标题
-    title: "AnyHelper 密钥管理系统",
+    title: "DuGuYifei 密钥管理系统",
     //描述
     desc: "密钥管理系统",
     //是否展示版权信息
